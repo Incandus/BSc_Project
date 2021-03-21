@@ -1,0 +1,42 @@
+#		Configuration file for the Mach 3 wind tunnel with step
+#		problem (Emery, A. E., 1968, JCP, 2, 306; Woodward, P. and
+#		Colella, P., 1984, JCP, 54, 115)
+
+REQUIRES Grid/GridBoundaryConditions/OneRow
+REQUIRES physics/Hydro
+REQUIRES physics/Eos/EosMain/Gamma
+
+VARIABLE BDRY
+
+
+D sim_TAmbient       Initial ambient temperature
+PARAMETER sim_TAmbient     REAL    273.0
+
+D sim_rhoAmbient       Initial ambient density
+PARAMETER sim_rhoAmbient   REAL    1.4
+
+D sim_pAmbient       Initial ambient pressure
+PARAMETER sim_pAmbient     REAL    1.0
+
+D sim_pResev       Fixed reservoir pressure
+PARAMETER sim_pResev       REAL    5.0e5
+
+D sim_dcrit       Nozzle throat diameter
+PARAMETER sim_dcrit        REAL    0.1
+
+D sim_dexit       Nozzle exit diameter
+PARAMETER sim_dexit        REAL    1.0
+
+D sim_lopt        Nozzle length
+PARAMETER sim_lopt         REAL    1.5
+
+D sim_angle        Nozzle obstruction angle
+PARAMETER sim_angle         REAL    10.0
+
+D sim_obslen        Nozzle obstruction length
+PARAMETER sim_obslen         REAL    1.5
+
+# Enough NBOUNDARIES space for taking 12 blocks out of a 2d problem.  Appears to segfault if too large (>200?):
+PPDEFINE NBOUNDARIES 64
+D gr_pmrpNboundaries sets value for PARAMESH runtime parameter nboundaries
+PARAMETER gr_pmrpNboundaries INTEGER 64 [64 ... ]

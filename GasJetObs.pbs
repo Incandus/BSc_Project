@@ -1,0 +1,33 @@
+#!/bin/sh
+#PBS -N GasJetObs
+#PBS -l walltime=01:00:00
+#PBS -l select=2:ncpus=16:mem=2gb:mpiprocs=16
+#PBS -m abe
+
+module unload intel-suite
+module load intel-suite
+module unload mpi
+module load mpi
+module unload hdf5
+module load hdf5
+module load hypre
+
+echo “current dir is $(pwd)”
+echo $HOSTNAME
+
+RUN=GasJetObs
+
+OUTDIR=$EPHEMERAL/$RUN
+HOMEDIR=$HOME/FLASH4.6.2/GasJetObs
+
+rm -rf $OUTDIR
+mkdir $OUTDIR
+
+cp $HOMEDIR/flash.par $OUTDIR
+cp $HOMEDIR/flash4 $OUTDIR
+
+echo “current dir is $(pwd)”
+cd $OUTDIR
+
+mpiexec $HOMEDIR/flash4
+

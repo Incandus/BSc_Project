@@ -1,0 +1,54 @@
+#!/bin/sh
+#PBS -N GasJetTotal4
+#PBS -l walltime=02:00:00
+#PBS -l select=1:ncpus=48:mem=8gb
+#PBS -m abe
+
+module unload intel-suite
+module load intel-suite
+module unload mpi
+module load mpi
+module unload hdf5
+module load hdf5
+module load hypre
+
+echo “current dir is $(pwd)”
+echo $HOSTNAME
+
+RUN=GasJetTotal4
+
+
+
+HOMEDIR=$HOME/FLASH4.6.2/GasJetExp
+
+cd $HOMEDIR
+
+lenlist=$(seq 0.2 0.1 0.5)
+anglist=$(seq 15 5 35)
+
+
+
+for length in $lenlist
+do
+   for angle in $anglist
+   do
+   cd $HOMEDIR
+
+   OUTDIR=$EPHEMERAL/$RUN/$length/$angle
+   rm -rf $OUTDIR
+   mkdir -p $OUTDIR
+   
+
+   sed -i "s/^sim_obslen =.*/sim_obslen = ${length}/" ./flash.par
+   sed -i "s/^sim_angle =.*/sim_angle = ${angle}/" ./flash.par
+
+   cp $HOMEDIR/flash.par $OUTDIR
+   cp $HOMEDIR/flash4 $OUTDIR
+
+
+   cd $OUTDIR
+
+
+   mpiexec $HOMEDIR/flash4
+   done
+done
